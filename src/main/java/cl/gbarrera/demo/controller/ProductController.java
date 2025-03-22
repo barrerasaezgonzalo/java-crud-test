@@ -4,8 +4,8 @@ import cl.gbarrera.demo.service.ProductService;  // Asegúrate de importar Produ
 import cl.gbarrera.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -15,7 +15,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public Flux<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 /*

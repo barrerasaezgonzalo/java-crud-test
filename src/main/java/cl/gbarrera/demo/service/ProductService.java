@@ -2,6 +2,7 @@ package cl.gbarrera.demo.service;
 
 import org.springframework.stereotype.Service;
 import cl.gbarrera.demo.model.Product;  // Asegúrate de importar el modelo Product
+import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +14,7 @@ public class ProductService {
             new Product(2, "Product 2", 500000)
     );
 
-    public List<Product> getAllProducts() {
-        return products;
+    public Flux<Product> getAllProducts() {
+        return Flux.fromIterable(products);
     }
 }
