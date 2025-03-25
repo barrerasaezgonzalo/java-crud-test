@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+ 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -38,6 +38,6 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33'
 
 }
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
 	enabled = false
 }

@@ -22,8 +22,6 @@ build/
 /.m2/
 
 # Archivos de dependencias de Gradle
-.gradle/
-build/
 out/
 
 # Archivos temporales de sistemas operativos
