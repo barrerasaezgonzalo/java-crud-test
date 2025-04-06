@@ -1,5 +1,7 @@
 package cl.gbarrera.demo.controller;
 
+import cl.gbarrera.demo.dto.ProductDTO;
+import cl.gbarrera.demo.dto.ProductDTOWithCost;
 import cl.gbarrera.demo.service.ProductService;
 import cl.gbarrera.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,9 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public Flux<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public Flux<ProductDTO> getAllProducts() {
+        return productService.getAllProducts()
+                .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice()));
     }
 
     @GetMapping("/{id}")
@@ -46,6 +49,17 @@ public class ProductController {
         return productService.deleteProduct(id)
                 .then(Mono.just(ResponseEntity.noContent().build()))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+    }
+
+    @GetMapping("/search")
+    public Flux<Product> searchProductsByName(@RequestParam String name) {
+        return productService.searchProductsByName(name);
+    }
+
+    @GetMapping("/withCost")
+    public Flux<ProductDTOWithCost> getAllProductsWithCostPrice(){
+        return productService.getAllProducts()
+                .map(product -> new ProductDTOWithCost(product.getId(), product.getName(), product.getPrice(), product.getCostPrice()));
     }
 
 

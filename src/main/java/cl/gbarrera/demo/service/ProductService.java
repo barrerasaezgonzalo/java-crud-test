@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import cl.gbarrera.demo.model.Product;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-//import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class ProductService {
 
@@ -41,5 +40,9 @@ public class ProductService {
                 .flatMap(optionalProduct -> optionalProduct
                         .map(product -> Mono.fromRunnable(() -> productRepository.delete(product)))
                         .orElse(Mono.empty())).then();
+    }
+
+    public Flux<Product> searchProductsByName(String name) {
+        return Flux.fromIterable(productRepository.findByNameContainingIgnoreCase(name));
     }
 }
