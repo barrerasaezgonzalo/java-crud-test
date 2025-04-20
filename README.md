@@ -3,4 +3,4 @@ Basic Crud en spring boot /Gradle to practic
 - Crud: Getall, GeyByAId, Update,remove
 - one enpoint con private data acoording DTO
 
-TODO: JWT
+NEXT: JWT
