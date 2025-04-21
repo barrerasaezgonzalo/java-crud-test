@@ -1,6 +1,2 @@
-Basic Crud en spring boot and gradle to practical
-- using JPA, lombok, webflux
-- crud: Getall, GeyById, Update, Remove
-- diferent data if DTO is defined
-
-NEXT: JWT
+A basic crud in spring boot with gradle
+using lombok, mysql, jpa, webflux
