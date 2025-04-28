@@ -1,18 +1,24 @@
 package cl.gbarrera.demo.controller;
 
 import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.dto.ProductDTOWithCost;
+import cl.gbarrera.demo.exception.GlobalExceptionHandler;
+import cl.gbarrera.demo.model.ErrorResponse;
 import cl.gbarrera.demo.service.ProductService;
-import cl.gbarrera.demo.model.Product;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping(value = {"/products", "/products/"})
 public class ProductController {
 
     @Autowired
@@ -21,25 +27,27 @@ public class ProductController {
     @GetMapping
     public Flux<ProductDTO> getAllProducts() {
         return productService.getAllProducts()
-                .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice()));
+                .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(), null));
     }
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<Product>> getProductById(@PathVariable Long id) {
+    public Mono<ResponseEntity<ProductDTO>> getProductById(@PathVariable Long id) {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Mono<Product> createProduct(@RequestBody Product product) {
-
-        return productService.createProduct(product);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
+        return productService.createProduct(productDTO)
+                .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getCostPrice()));
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<Product>> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product)
+    public Mono<ResponseEntity<ProductDTO>> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        return productService.updateProduct(id, productDTO)
+                .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getCostPrice()))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -47,19 +55,39 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Object>> deleteProduct(@PathVariable Long id) {
         return productService.deleteProduct(id)
-                .then(Mono.just(ResponseEntity.noContent().build()))
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
-    @GetMapping("/search")
-    public Flux<Product> searchProductsByName(@RequestParam String name) {
-        return productService.searchProductsByName(name);
-    }
+   @GetMapping("/search")
+   public Mono<ResponseEntity<?>> searchProductsByName(@RequestParam String name) {
+       return productService.searchProductsByName(name)
+               .collectList()
+               .flatMap(products -> {
+                   if (products.isEmpty()) {
+                       ErrorResponse errorResponse = new ErrorResponse(
+                               HttpStatus.NOT_FOUND.value(),
+                               "Producto no encontrado",
+                               "No se encontraron productos con el nombre: " + name,
+                               "/search?name=" + name,  // Aquí indicamos el path manualmente
+                               UUID.randomUUID().toString(),
+                               LocalDateTime.now()
+                       );
+                       return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse));
+                   } else {
+                       return Mono.just(ResponseEntity.ok(products));
+                   }
+               });
+   }
 
     @GetMapping("/withCost")
-    public Flux<ProductDTOWithCost> getAllProductsWithCostPrice(){
+    public Flux<ProductDTO> getAllProductsWithCostPrice() {
         return productService.getAllProducts()
-                .map(product -> new ProductDTOWithCost(product.getId(), product.getName(), product.getPrice(), product.getCostPrice()));
+                .map(product -> new ProductDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getPrice(),
+                        product.getCostPrice()
+                ));
     }
 
 

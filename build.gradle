@@ -38,6 +38,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
+	implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+	implementation 'org.glassfish:jakarta.el:4.0.0'
 
 }
 tasks.withType(Test).configureEach {

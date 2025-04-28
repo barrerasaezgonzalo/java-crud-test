@@ -1,5 +1,6 @@
 package cl.gbarrera.demo.repository;
 
+import cl.gbarrera.demo.dto.ProductDTO;
 import cl.gbarrera.demo.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
