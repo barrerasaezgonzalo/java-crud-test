@@ -1,6 +1,7 @@
 package cl.gbarrera.demo.exception;
 
 import cl.gbarrera.demo.model.ErrorResponse;
+import cl.gbarrera.demo.util.Messages;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
         String requestId = UUID.randomUUID().toString();
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.NOT_FOUND.value(),
                 "Invalid input",
                 ex.getMessage(),
                 request.getRequestURI(),
                 requestId,
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
@@ -46,7 +47,7 @@ public class GlobalExceptionHandler {
         String requestId = UUID.randomUUID().toString();
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
-                "product not found",
+                Messages.PRODUCT_NOT_FOUND,
                 ex.getMessage(),
                 request.getRequestURI(),
                 requestId,

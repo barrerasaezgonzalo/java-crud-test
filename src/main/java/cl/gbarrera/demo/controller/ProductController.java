@@ -1,8 +1,7 @@
 package cl.gbarrera.demo.controller;
 
 import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.exception.GlobalExceptionHandler;
-import cl.gbarrera.demo.model.ErrorResponse;
+import cl.gbarrera.demo.exception.ProductNotFoundException;
 import cl.gbarrera.demo.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 @RestController
@@ -64,15 +59,7 @@ public class ProductController {
                .collectList()
                .flatMap(products -> {
                    if (products.isEmpty()) {
-                       ErrorResponse errorResponse = new ErrorResponse(
-                               HttpStatus.NOT_FOUND.value(),
-                               "Producto no encontrado",
-                               "No se encontraron productos con el nombre: " + name,
-                               "/search?name=" + name,  // Aquí indicamos el path manualmente
-                               UUID.randomUUID().toString(),
-                               LocalDateTime.now()
-                       );
-                       return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse));
+                       return Mono.error(new ProductNotFoundException(name));
                    } else {
                        return Mono.just(ResponseEntity.ok(products));
                    }
@@ -89,6 +76,4 @@ public class ProductController {
                         product.getCostPrice()
                 ));
     }
-
-
 }

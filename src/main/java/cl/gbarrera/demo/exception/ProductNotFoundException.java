@@ -1,10 +1,12 @@
 package cl.gbarrera.demo.exception;
 
+import cl.gbarrera.demo.util.Messages;
+
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(Long id) {
-        super("Product with ID " + id + " not found");
+        super(String.format(Messages.PRODUCT_ID_NOT_FOUND, id));
     }
     public ProductNotFoundException(String name) {
-        super("No products were found with the name: " + name);
+        super(String.format(Messages.PRODUCT_NOT_FOUND_DETAIL, name));
     }
 }

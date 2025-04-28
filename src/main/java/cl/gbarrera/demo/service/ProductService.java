@@ -104,15 +104,14 @@ public class ProductService {
     public Flux<ProductDTO> searchProductsByName(String name) {
         List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
         if (products.isEmpty()) {
-            throw new ProductNotFoundException(name);
+            return Flux.empty();
         }
-        return Flux.fromIterable(productRepository.findByNameContainingIgnoreCase(name))
+        return Flux.fromIterable(products)
                 .map(product -> new ProductDTO(
                         product.getId(),
                         product.getName(),
                         product.getPrice(),
                         product.getCostPrice()
-                ))
-                .switchIfEmpty(Flux.empty());
+                ));
     }
 }
