@@ -1,7 +1,7 @@
 package cl.gbarrera.demo.controller;
 
 import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.exception.ProductNotFoundException;
+import cl.gbarrera.demo.exception.InvalidProductException;
 import cl.gbarrera.demo.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,7 @@ public class ProductController {
                 .map(product -> new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getCostPrice()));
     }
 
+
     @PutMapping("/{id}")
     public Mono<ResponseEntity<ProductDTO>> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(id, productDTO)
@@ -52,19 +53,6 @@ public class ProductController {
         return productService.deleteProduct(id)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
-
-   @GetMapping("/search")
-   public Mono<ResponseEntity<?>> searchProductsByName(@RequestParam String name) {
-       return productService.searchProductsByName(name)
-               .collectList()
-               .flatMap(products -> {
-                   if (products.isEmpty()) {
-                       return Mono.error(new ProductNotFoundException(name));
-                   } else {
-                       return Mono.just(ResponseEntity.ok(products));
-                   }
-               });
-   }
 
     @GetMapping("/withCost")
     public Flux<ProductDTO> getAllProductsWithCostPrice() {

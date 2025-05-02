@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
+
+    /*@ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
         String requestId = UUID.randomUUID().toString();
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 "Invalid input",
-                ex.getMessage(),
                 request.getRequestURI(),
                 requestId,
                 LocalDateTime.now()
@@ -40,20 +40,19 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(InvalidProductException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(InvalidProductException ex, HttpServletRequest request) {
         String requestId = UUID.randomUUID().toString();
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                Messages.PRODUCT_NOT_FOUND,
+                ex.getStatus().value(),
                 ex.getMessage(),
                 request.getRequestURI(),
                 requestId,
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
 
 

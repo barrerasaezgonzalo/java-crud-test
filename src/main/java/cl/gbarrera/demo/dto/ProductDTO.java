@@ -13,11 +13,11 @@ public class ProductDTO {
 
     private Long id;
 
-    @NotNull(message = "Name cannot be null")
+    @NotNull()
     private String name;
 
-    @NotNull(message = "Price cannot be null")
-    @PositiveOrZero(message = "Price must be zero or positive")
+    @NotNull()
+    @PositiveOrZero()
     private Integer price;
 
     private Integer costPrice;
