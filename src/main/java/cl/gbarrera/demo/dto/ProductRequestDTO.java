@@ -11,10 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProductRequestDTO {
 
-    @NotNull
-    private String name;
+  @NotNull private String name;
 
-    @NotNull
-    @PositiveOrZero
-    private Integer price;
+  @NotNull @PositiveOrZero private Integer price;
 }

@@ -3,13 +3,12 @@ plugins {
 	id 'org.springframework.boot' version '3.4.2'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.diffplug.spotless' version '6.25.0'
+	id 'com.github.sherter.google-java-format' version '0.9'
 }
-
 
 spotless {
 	java {
-		googleJavaFormat()
-		target 'src/**/*.java'
+		googleJavaFormat('1.15.0')
 	}
 }
 
@@ -49,7 +48,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.security:spring-security-config'
 	implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'com.auth0:java-jwt:3.18.2'
 

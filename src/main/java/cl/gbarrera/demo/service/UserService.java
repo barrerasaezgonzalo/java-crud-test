@@ -1,28 +1,37 @@
 package cl.gbarrera.demo.service;
 
-import cl.gbarrera.demo.dto.UserDto;
+import cl.gbarrera.demo.model.User;
 import cl.gbarrera.demo.repository.UserRepository;
-import org.springframework.stereotype.Service;
+import java.util.Collections;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
 
-   private final UserRepository userRepository;
-   private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    User user =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
+    return new org.springframework.security.core.userdetails.User(
+        user.getUsername(), user.getPassword(), Collections.emptyList());
+  }
 
-
-    public Optional<Boolean> authenticateUser(UserDto dto) {
-        return userRepository.findByUsername(dto.getUsername())
-                .map(user -> {
-                    return passwordEncoder.matches(dto.getPassword(), user.getPassword());
-                });
-}}
+  public boolean authenticateUser(String username, String password) {
+    return userRepository
+        .findByUsername(username)
+        .map(user -> passwordEncoder.matches(password, user.getPassword()))
+        .orElse(false);
+  }
+}
