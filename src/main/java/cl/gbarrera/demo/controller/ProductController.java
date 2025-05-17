@@ -1,71 +1,93 @@
 package cl.gbarrera.demo.controller;
 
 import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.model.Product;
-import cl.gbarrera.demo.repository.ProductRepository;
+import cl.gbarrera.demo.dto.ProductRequestDTO;
+import cl.gbarrera.demo.service.ProductService;
 import jakarta.validation.Valid;
+
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+
+import static cl.gbarrera.demo.util.Messages.VALIDATION_FAILED;
+
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
-  private final ProductRepository repository;
+    private final ProductService productService;
 
-  public ProductController(ProductRepository repository) {
-    this.repository = repository;
-  }
-
-  @GetMapping
-  public List<ProductDTO> getAll() {
-    return repository.findAll().stream()
-        .map(p -> new ProductDTO(p.getId(), p.getName(), p.getPrice()))
-        .collect(Collectors.toList());
-  }
-
-  @GetMapping("/{id}")
-  public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
-    return repository
-        .findById(id)
-        .map(p -> new ProductDTO(p.getId(), p.getName(), p.getPrice()))
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
-  }
-
-  @PostMapping
-  public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO dto) {
-    Product product = new Product();
-    product.setName(dto.getName());
-    product.setPrice(dto.getPrice());
-    Product saved = repository.save(product);
-    return ResponseEntity.ok(new ProductDTO(saved.getId(), saved.getName(), saved.getPrice()));
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<ProductDTO> update(
-      @PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
-    return repository
-        .findById(id)
-        .map(
-            existing -> {
-              existing.setName(dto.getName());
-              existing.setPrice(dto.getPrice());
-              Product updated = repository.save(existing);
-              return ResponseEntity.ok(
-                  new ProductDTO(updated.getId(), updated.getName(), updated.getPrice()));
-            })
-        .orElse(ResponseEntity.notFound().build());
-  }
-
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    if (!repository.existsById(id)) {
-      return ResponseEntity.notFound().build();
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
-    repository.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
+
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> getAll() {
+        List<ProductDTO> products = productService.getAllProducts();
+
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getById(@PathVariable Long id) {
+        ProductDTO dto = productService.getProductById(id);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", VALIDATION_FAILED);
+            errorResponse.put("messages", errors);
+            errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        ProductDTO createdProduct = productService.createProduct(productRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductRequestDTO productRequestDTO,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", VALIDATION_FAILED);
+            errorResponse.put("messages", errors);
+            errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
+
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        ProductDTO updatedProduct = productService.updateProduct(id, productRequestDTO);
+
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDto {
 
-  private Long id;
+    private Long id;
 
-  @NotNull() private String username;
+    @NotNull()
+    private String username;
 
-  @NotNull() private String password;
+    @NotNull()
+    private String password;
 }

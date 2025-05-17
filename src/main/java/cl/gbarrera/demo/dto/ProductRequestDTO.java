@@ -6,12 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static cl.gbarrera.demo.util.Messages.REQUEST_INVALID;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class ProductRequestDTO {
 
-  @NotNull private String name;
-
-  @NotNull @PositiveOrZero private Integer price;
+    @NotNull(message = REQUEST_INVALID)
+    private String name;
+    @NotNull(message = REQUEST_INVALID)
+    @PositiveOrZero
+    private Long price;
 }

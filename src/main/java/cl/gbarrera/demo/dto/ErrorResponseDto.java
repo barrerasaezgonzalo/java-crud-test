@@ -1,18 +1,17 @@
 package cl.gbarrera.demo.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorResponseDto {
-  private String error;
-  private String message;
-  private int status;
 
-  public ErrorResponseDto(String error, String message, int status) {
-    this.error = error;
-    this.message = message;
-    this.status = status;
-  }
+    private String error;
+    private Object message;
+    private int status;
 }

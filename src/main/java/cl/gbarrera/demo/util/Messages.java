@@ -2,10 +2,11 @@ package cl.gbarrera.demo.util;
 
 public class Messages {
 
-  public static final String PRODUCT_ID_NOT_FOUND = "Product with the id %d was not found ";
-  public static final String PRODUCT_NAME_CANNOT_BE_NULL = "Product name null or malformed ";
-  public static final String PRODUCT_PRICE_CANNOT_BE_NULL = "Product price null or malformed ";
-  public static final String INVALID_PARAMETER = "Invalid parameter";
-  public static final String PRODUCT_NAME_CANNOT_BE_EMPTY = "Product name cannot be empty";
-  public static final String INVALID_CREDENTIALS = "Invalid credentials";
+    public static final String INVALID_CREDENTIALS = "Invalid credentials";
+    public static final String PRODUCT_NOT_FOUND = "Product not found ";
+    public static final String REQUEST_INVALID = "The request contains invalid or missing fields";
+    public static final String VALIDATION_FAILED = "Validation failed";
+    public static final String MALFORMED_JSON_OR_FIELD_TYPES = "Malformed JSON or invalid field types";
+    public static final String INVALID_OR_EXPIRED_TOKEN = "Invalid or expired token";
+    public static final String USER_NOT_FOUND = "User not found: ";
 }
