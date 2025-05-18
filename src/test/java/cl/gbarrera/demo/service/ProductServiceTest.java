@@ -180,6 +180,6 @@ public class ProductServiceTest {
         assertEquals(2, response.getSize());
         assertEquals(10, response.getTotalElements());
         assertEquals(5, response.getTotalPages());
-        assertEquals(false, response.isLast());
+        assertFalse(response.isLast());
     }
 }
