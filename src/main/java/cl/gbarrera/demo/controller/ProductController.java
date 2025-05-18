@@ -1,7 +1,10 @@
 package cl.gbarrera.demo.controller;
 
+import cl.gbarrera.demo.dto.PagedResponse;
 import cl.gbarrera.demo.dto.ProductDTO;
 import cl.gbarrera.demo.dto.ProductRequestDTO;
+import cl.gbarrera.demo.dto.ProductSearchCriteria;
+import cl.gbarrera.demo.model.Product;
 import cl.gbarrera.demo.service.ProductService;
 import jakarta.validation.Valid;
 
@@ -9,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import jakarta.validation.Valid;
 
 import static cl.gbarrera.demo.util.Messages.VALIDATION_FAILED;
 
@@ -89,5 +94,10 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<PagedResponse<Product>> search(@Valid @RequestBody ProductSearchCriteria criteria) {
+        return ResponseEntity.ok(productService.search(criteria));
     }
 }

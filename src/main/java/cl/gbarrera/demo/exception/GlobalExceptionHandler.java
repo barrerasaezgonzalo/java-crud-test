@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import static cl.gbarrera.demo.util.Messages.MALFORMED_JSON_OR_FIELD_TYPES;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import cl.gbarrera.demo.exception.InvalidProductException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -64,5 +66,14 @@ public class GlobalExceptionHandler {
                 );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnrecognizedPropertyException.class)
+    public ResponseEntity<InvalidProductException> handleUnrecognizedField(UnrecognizedPropertyException ex) {
+        InvalidProductException error = new InvalidProductException(
+                MALFORMED_JSON_OR_FIELD_TYPES,
+                HttpStatus.BAD_REQUEST
+        );
+        return new ResponseEntity<>(error, error.getStatus());
     }
 }
