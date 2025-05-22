@@ -13,10 +13,10 @@ public class ProductSearchCriteria {
     private String name;
 
     @Min(0)
-    private Double minPrice;
+    private Long minPrice;
 
     @Min(0)
-    private Double maxPrice;
+    private Long maxPrice;
 
     @NotNull
     @Min(0)

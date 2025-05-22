@@ -2,11 +2,11 @@ package cl.gbarrera.demo.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
-@Getter
 @AllArgsConstructor
 public class UserDto {
 

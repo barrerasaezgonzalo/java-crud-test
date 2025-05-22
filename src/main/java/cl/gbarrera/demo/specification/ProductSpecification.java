@@ -8,6 +8,10 @@ import java.util.List;
 import jakarta.persistence.criteria.Predicate;
 
 public class ProductSpecification {
+
+    private ProductSpecification() {
+
+    }
     public static Specification<Product> byCriteria(ProductSearchCriteria criteria) {
         return (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
