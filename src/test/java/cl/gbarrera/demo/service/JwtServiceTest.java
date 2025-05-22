@@ -24,7 +24,7 @@ public class JwtServiceTest {
         long expiration = 3600000L;
         JwtService jwtService = new JwtService(secret, expiration);
         String username = "john";
-        String token = jwtService.generateToken(username);
+        String token = jwtService.generateAccessToken(username);
         assertNotNull(token);
         Algorithm algorithm = Algorithm.HMAC256(secret);
         DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
@@ -40,7 +40,7 @@ public class JwtServiceTest {
         long expiration = 3600000L;
         JwtService jwtService = new JwtService(secret, expiration);
         String username = "john";
-        String token = jwtService.generateToken(username);
+        String token = jwtService.generateAccessToken(username);
         String subject = jwtService.validateTokenAndRetrieveSubject(token);
         assertEquals(username, subject);
     }

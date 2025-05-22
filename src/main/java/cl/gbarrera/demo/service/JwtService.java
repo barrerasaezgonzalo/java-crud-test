@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 public class JwtService {
 
     private final String secret;
-    private final long expirationMs;
+    private final long accessTokenExpirationMs;
 
     public JwtService(
-            @Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long expirationMs) {
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.access-token.expiration}") long accessTokenExpirationMs) {
         this.secret = secret;
-        this.expirationMs = expirationMs;
+        this.accessTokenExpirationMs = accessTokenExpirationMs;
     }
 
-    public String generateToken(String username) {
+    public String generateAccessToken(String username) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
-
         return JWT.create()
                 .withSubject(username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + expirationMs))
+                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
                 .sign(algorithm);
     }
 
