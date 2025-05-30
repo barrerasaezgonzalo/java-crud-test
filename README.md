@@ -1,2 +1,11 @@
-A basic crud in spring boot with gradle
-using lombok, mysql, jpa, webflux
+Basic Crud
+http://localhost:8080/swagger-ui/index.html
+
+Lombok
+JPA
+Webflux
+Base de datos Mysql
+Cache Redis
+JWT Auth
+Jacoco Coverage
+SLF4J Logs
