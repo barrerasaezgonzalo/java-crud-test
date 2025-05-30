@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import static cl.gbarrera.demo.util.Messages.MALFORMED_JSON_OR_FIELD_TYPES;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -27,7 +29,7 @@ public class GlobalExceptionHandler {
                         request.getRequestURI(),
                         requestId,
                         LocalDateTime.now());
-
+        log.error("InvalidProductException Error: {}", ex.getMessage());
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
 
@@ -45,7 +47,7 @@ public class GlobalExceptionHandler {
                         requestId,
                         LocalDateTime.now()
                 );
-
+        log.error("MethodArgumentNotValidException Error: {}", MALFORMED_JSON_OR_FIELD_TYPES);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -63,7 +65,7 @@ public class GlobalExceptionHandler {
                         requestId,
                         LocalDateTime.now()
                 );
-
+        log.error("HttpMessageNotReadableException Error: {}", MALFORMED_JSON_OR_FIELD_TYPES);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -73,6 +75,7 @@ public class GlobalExceptionHandler {
                 MALFORMED_JSON_OR_FIELD_TYPES,
                 HttpStatus.BAD_REQUEST
         );
+        log.error("UnrecognizedPropertyException Error: {}", MALFORMED_JSON_OR_FIELD_TYPES);
         return new ResponseEntity<>(error, error.getStatus());
     }
 }

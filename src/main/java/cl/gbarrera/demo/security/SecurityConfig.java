@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -54,8 +55,11 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
-                        .requestMatchers("/products/**").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.GET, "/products/**").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAuthority("ROLE_USER")
                         .anyRequest().authenticated()
+                        /*  .anyRequest().permitAll() */
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

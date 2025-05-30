@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static cl.gbarrera.demo.util.Messages.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -32,6 +34,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto dto) {
+        log.info("User: {} login in", dto.getUsername());
         boolean isValid = userService.authenticateUser(dto.getUsername(), dto.getPassword());
         if (isValid) {
             String accessToken = jwtService.generateAccessToken(dto.getUsername());
@@ -48,7 +51,7 @@ public class UserController {
             ErrorResponseDto error =
                     new ErrorResponseDto(
                             INVALID_CREDENTIALS, INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED.value());
-
+            log.info("User: {} login error: {}", dto.getUsername(), INVALID_CREDENTIALS);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static cl.gbarrera.demo.util.Messages.PRODUCT_NOT_FOUND;
-
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -63,8 +62,14 @@ public class ProductServiceImpl implements ProductService {
         return new ProductDTO(savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice());
     }
 
-    @CachePut(value = "product", key = "#product.id")
-    @CacheEvict(value="products", allEntries=true)
+    @Caching(
+            put = {
+                    @CachePut(value = "product", key = "#id")
+            },
+            evict = {
+                    @CacheEvict(value = "products", allEntries = true)
+            }
+    )
     @Override
     public ProductDTO updateProduct(Long id, ProductRequestDTO productRequestDTO) {
         Product product = productRepository.findById(id)
@@ -77,14 +82,10 @@ public class ProductServiceImpl implements ProductService {
         return new ProductDTO(updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getPrice());
     }
 
-    @Caching(
-            put = {
-                    @CachePut(value = "product", key = "#id")
-            },
-            evict = {
-                    @CacheEvict(value = "products", allEntries = true)
-            }
-    )
+    @Caching(evict = {
+            @CacheEvict(value = "product", key = "#id"),
+            @CacheEvict(value = "products", allEntries = true)
+    })
     @Override
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
