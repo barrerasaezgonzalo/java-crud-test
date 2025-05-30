@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import java.time.Instant;
 import java.util.Optional;
+
+import static cl.gbarrera.demo.util.Messages.EXPIRED_REFRESH_TOKEN;
+import static cl.gbarrera.demo.util.Messages.MISSING_REFRESH_TOKEN;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -101,7 +104,7 @@ class RefreshTokenServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
                 refreshTokenService.verifyRefreshToken(token)
         );
-        assertEquals("Refresh token no encontrado", exception.getMessage());
+        assertEquals(MISSING_REFRESH_TOKEN, exception.getMessage());
     }
 
     @Test
@@ -116,7 +119,7 @@ class RefreshTokenServiceTest {
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
                 refreshTokenService.verifyRefreshToken(token)
         );
-        assertEquals("Refresh token expirado. Por favor inicia sesión de nuevo.", exception.getMessage());
+        assertEquals(EXPIRED_REFRESH_TOKEN, exception.getMessage());
 
         verify(refreshTokenRepository).delete(refreshToken);
     }

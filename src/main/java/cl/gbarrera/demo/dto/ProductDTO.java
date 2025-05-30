@@ -1,19 +1,17 @@
 package cl.gbarrera.demo.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static cl.gbarrera.demo.util.Messages.REQUEST_INVALID;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     private Long id;
     private String name;

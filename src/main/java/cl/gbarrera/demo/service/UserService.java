@@ -2,8 +2,11 @@ package cl.gbarrera.demo.service;
 
 import cl.gbarrera.demo.model.User;
 import cl.gbarrera.demo.repository.UserRepository;
-import java.util.Collections;
+
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,8 +28,10 @@ public class UserService implements UserDetailsService {
                         .findByUsername(username)
                         .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + ": " + username));
 
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), Collections.emptyList());
+                user.getUsername(), user.getPassword(), authorities );
     }
 
     public boolean authenticateUser(String username, String password) {

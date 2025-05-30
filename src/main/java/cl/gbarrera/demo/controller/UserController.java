@@ -1,7 +1,5 @@
 package cl.gbarrera.demo.controller;
 
-import static cl.gbarrera.demo.util.Messages.INVALID_CREDENTIALS;
-
 import cl.gbarrera.demo.dto.ErrorResponseDto;
 import cl.gbarrera.demo.dto.UserDto;
 import cl.gbarrera.demo.service.JwtService;
@@ -15,6 +13,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static cl.gbarrera.demo.util.Messages.*;
 
 @RestController
 @RequestMapping("/users")
@@ -58,7 +58,7 @@ public class UserController {
         String oldRefreshToken = request.get("refresh_token");
 
         if (oldRefreshToken == null || oldRefreshToken.isEmpty()) {
-            return ResponseEntity.badRequest().body("Missing refresh token");
+            return ResponseEntity.badRequest().body(MISSING_REFRESH_TOKEN);
         }
 
         try {
@@ -76,7 +76,7 @@ public class UserController {
             return ResponseEntity.ok(response);
 
         } catch (JWTVerificationException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+            return ResponseEntity.status((HttpStatus.UNAUTHORIZED)).body(INVALID_REFRESH_TOKEN);
         }
     }
 

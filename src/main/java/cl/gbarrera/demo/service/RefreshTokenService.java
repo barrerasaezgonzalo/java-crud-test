@@ -9,6 +9,9 @@
     import java.util.Optional;
     import java.util.UUID;
 
+    import static cl.gbarrera.demo.util.Messages.EXPIRED_REFRESH_TOKEN;
+    import static cl.gbarrera.demo.util.Messages.MISSING_REFRESH_TOKEN;
+
     @Service
     public class RefreshTokenService {
 
@@ -46,11 +49,11 @@
 
         public String verifyRefreshToken(String token) {
             RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                    .orElseThrow(() -> new RuntimeException("Refresh token no encontrado"));
+                    .orElseThrow(() -> new RuntimeException(MISSING_REFRESH_TOKEN));
 
             if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
                 refreshTokenRepository.delete(refreshToken);
-                throw new RuntimeException("Refresh token expirado. Por favor inicia sesión de nuevo.");
+                throw new RuntimeException(EXPIRED_REFRESH_TOKEN);
             }
 
             return refreshToken.getUsername();

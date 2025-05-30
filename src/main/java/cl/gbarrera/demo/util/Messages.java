@@ -9,4 +9,7 @@ public class Messages {
     public static final String MALFORMED_JSON_OR_FIELD_TYPES = "Malformed JSON or invalid field types";
     public static final String INVALID_OR_EXPIRED_TOKEN = "Invalid or expired token";
     public static final String USER_NOT_FOUND = "User not found: ";
+    public static final String MISSING_REFRESH_TOKEN =  "Missing refresh token";
+    public static final String INVALID_REFRESH_TOKEN =  "Invalid refresh token";
+    public static final String EXPIRED_REFRESH_TOKEN = "Expired refresh token";
 }

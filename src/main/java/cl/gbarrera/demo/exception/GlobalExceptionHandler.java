@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import static cl.gbarrera.demo.util.Messages.MALFORMED_JSON_OR_FIELD_TYPES;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import cl.gbarrera.demo.exception.InvalidProductException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
