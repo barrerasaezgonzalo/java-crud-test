@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import static cl.gbarrera.demo.util.Messages.MALFORMED_JSON_OR_FIELD_TYPES;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import lombok.extern.slf4j.Slf4j;
+import jakarta.persistence.OptimisticLockException;
 
 @Slf4j
 @ControllerAdvice
@@ -70,12 +71,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnrecognizedPropertyException.class)
-    public ResponseEntity<InvalidProductException> handleUnrecognizedField(UnrecognizedPropertyException ex) {
-        InvalidProductException error = new InvalidProductException(
+    public ResponseEntity<ErrorResponse> handleUnrecognizedField(UnrecognizedPropertyException ex, HttpServletRequest request) {
+        String requestId = UUID.randomUUID().toString();
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
                 MALFORMED_JSON_OR_FIELD_TYPES,
-                HttpStatus.BAD_REQUEST
+                request.getRequestURI(),
+                requestId,
+                LocalDateTime.now()
         );
         log.error("UnrecognizedPropertyException Error: {}", MALFORMED_JSON_OR_FIELD_TYPES);
-        return new ResponseEntity<>(error, error.getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockException(
+            OptimisticLockException ex, HttpServletRequest request) {
+        String requestId = UUID.randomUUID().toString();
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "The resource you are trying to update has been modified by another user. Please re-read and try again.",
+                request.getRequestURI(),
+                requestId,
+                LocalDateTime.now()
+        );
+        log.warn("OptimisticLockException: {}", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+
 }

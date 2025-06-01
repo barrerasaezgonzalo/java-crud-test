@@ -20,4 +20,7 @@ public class Product {
 
     @Column(nullable = false)
     private Long price;
+
+    @Version
+    private Integer version;
 }

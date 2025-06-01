@@ -1,11 +1,13 @@
 package cl.gbarrera.demo;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class DemoApplicationTest {
 
   @Test
-  void mainRunsWithoutExceptions() {
-    DemoApplication.main(new String[]{});
+  void contextLoads() {
+
   }
 }

@@ -9,6 +9,7 @@ import cl.gbarrera.demo.repository.ProductRepository;
 
 import cl.gbarrera.demo.service.ProductService;
 import cl.gbarrera.demo.specification.ProductSpecification;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 import static cl.gbarrera.demo.util.Messages.PRODUCT_NOT_FOUND;
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     public ProductServiceImpl(ProductRepository productRepository) {

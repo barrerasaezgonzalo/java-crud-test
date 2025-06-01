@@ -2,6 +2,7 @@ package cl.gbarrera.demo.exception;
 
 import cl.gbarrera.demo.model.ErrorResponse;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,14 +70,40 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleUnrecognizedField_shouldReturnBadRequest() {
-        UnrecognizedPropertyException ex = mock(UnrecognizedPropertyException.class);
 
-        ResponseEntity<InvalidProductException> response = handler.handleUnrecognizedField(ex);
+        UnrecognizedPropertyException ex = mock(UnrecognizedPropertyException.class);
+        when(ex.getPropertyName()).thenReturn("extraField");
+
+        ResponseEntity<ErrorResponse> response = handler.handleUnrecognizedField(ex, request);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        ErrorResponse errorBody = Objects.requireNonNull(response.getBody());
 
-        assertEquals(MALFORMED_JSON_OR_FIELD_TYPES, Objects.requireNonNull(response.getBody()).getMessage());
+        assertEquals(MALFORMED_JSON_OR_FIELD_TYPES, errorBody.getError());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), errorBody.getStatus());
+        assertEquals("/api/test", errorBody.getPath());
+        assertNotNull(errorBody.getTimestamp());
+        assertNotNull(errorBody.getRequestId());
+    }
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+    @Test
+    void handleOptimisticLockException_shouldReturnConflict() {
+        when(request.getRequestURI()).thenReturn("/api/v1/products/1");
+
+        OptimisticLockException ex = mock(OptimisticLockException.class);
+        when(ex.getMessage()).thenReturn("Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect)");
+
+        final String EXPECTED_ERROR_MESSAGE = "The resource you are trying to update has been modified by another user. Please re-read and try again.";
+
+        ResponseEntity<ErrorResponse> response = handler.handleOptimisticLockException(ex, request);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        ErrorResponse errorBody = Objects.requireNonNull(response.getBody());
+
+        assertEquals(HttpStatus.CONFLICT.value(), errorBody.getStatus());
+        assertEquals(EXPECTED_ERROR_MESSAGE, errorBody.getError());
+        assertEquals("/api/v1/products/1", errorBody.getPath());
+        assertNotNull(errorBody.getTimestamp());
+        assertNotNull(errorBody.getRequestId());
     }
 }

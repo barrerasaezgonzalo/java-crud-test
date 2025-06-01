@@ -8,7 +8,6 @@ import cl.gbarrera.demo.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,7 +28,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ProductControllerUnitTest {
+class ProductControllerTest {
 
     @Mock
     private ProductService productService;
@@ -54,8 +53,8 @@ class ProductControllerUnitTest {
         sampleCriteria.setPage(0);
         sampleCriteria.setSize(10);
         samplePage = new PageImpl<>(List.of(
-                new Product(1L, "SampleA", 100L),
-                new Product(2L, "SampleB", 200L)
+                new Product(1L, "SampleA", 100L,0),
+                new Product(2L, "SampleB", 200L,0)
         ));
     }
 

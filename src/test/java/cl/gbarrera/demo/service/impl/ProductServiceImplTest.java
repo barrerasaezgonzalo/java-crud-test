@@ -36,8 +36,8 @@ class ProductServiceImplTest {
     @Test
     void testGetAllProducts() {
         List<Product> products = List.of(
-                new Product(1L, "Producto A", 100L),
-                new Product(2L, "Producto B", 200L)
+                new Product(1L, "Producto A", 100L,0),
+                new Product(2L, "Producto B", 200L,0)
         );
         when(productRepository.findAll()).thenReturn(products);
 
@@ -50,7 +50,7 @@ class ProductServiceImplTest {
 
     @Test
     void getProductById_ShouldReturnDto_WhenFound() {
-        Product product = new Product(5L, "Test", 123L);
+        Product product = new Product(5L, "Test", 123L,0);
         when(productRepository.findById(5L)).thenReturn(Optional.of(product));
 
         ProductDTO dto = productService.getProductById(5L);
@@ -81,8 +81,8 @@ class ProductServiceImplTest {
         criteria.setPage(0);
         criteria.setSize(5);
         List<Product> list = List.of(
-                new Product(1L, "X1", 10L),
-                new Product(2L, "X2", 20L)
+                new Product(1L, "X1", 10L,0),
+                new Product(2L, "X2", 20L,0)
         );
         Page<Product> page = new PageImpl<>(list, PageRequest.of(0,5), 2);
         when(productRepository.findAll(any(Specification.class), any(PageRequest.class)))
@@ -99,7 +99,7 @@ class ProductServiceImplTest {
     @Test
     void testCreateProduct_withArgumentCaptor() {
         ProductRequestDTO dto = new ProductRequestDTO("Nuevo Producto", 999L);
-        Product savedProduct = new Product(1L, "Nuevo Producto", 999L);
+        Product savedProduct = new Product(1L, "Nuevo Producto", 999L,0);
 
         when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
 
@@ -121,8 +121,8 @@ class ProductServiceImplTest {
     void updateProduct_ShouldReturnDto_WhenExists() {
         Long id = 20L;
         ProductRequestDTO req = new ProductRequestDTO("Updated", 555L);
-        Product existing = new Product(id, "Old", 100L);
-        Product updated = new Product(id, "Updated", 555L);
+        Product existing = new Product(id, "Old", 100L,0);
+        Product updated = new Product(id, "Updated", 555L, 0);
         when(productRepository.findById(id)).thenReturn(Optional.of(existing));
         when(productRepository.save(any(Product.class))).thenReturn(updated);
         ProductDTO dto = productService.updateProduct(id, req);
@@ -184,8 +184,8 @@ class ProductServiceImplTest {
         criteria.setSize(10);
 
         List<Product> products = List.of(
-                new Product(1L, "Producto A", 100L),
-                new Product(2L, "Producto B", 200L)
+                new Product(1L, "Producto A", 100L,0),
+                new Product(2L, "Producto B", 200L,0)
         );
 
         Page<Product> page = new PageImpl<>(products, PageRequest.of(0, 10), products.size());
