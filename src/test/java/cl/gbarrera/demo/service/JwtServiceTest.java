@@ -1,5 +1,6 @@
 package cl.gbarrera.demo.service;
 
+import cl.gbarrera.demo.user.security.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;

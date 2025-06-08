@@ -1,7 +1,8 @@
 package cl.gbarrera.demo.specification;
 
-import cl.gbarrera.demo.dto.ProductSearchCriteria;
-import cl.gbarrera.demo.model.Product;
+import cl.gbarrera.demo.product.application.dto.ProductSearchCriteria;
+import cl.gbarrera.demo.product.domain.Product;
+import cl.gbarrera.demo.product.infrastructure.persistence.specification.ProductSpecification;
 import jakarta.persistence.criteria.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;

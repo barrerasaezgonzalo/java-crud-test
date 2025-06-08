@@ -1,6 +1,7 @@
 package cl.gbarrera.demo.security;
 
-import cl.gbarrera.demo.service.JwtService;
+import cl.gbarrera.demo.user.security.JwtAuthenticationFilter;
+import cl.gbarrera.demo.user.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -43,7 +44,7 @@ public class JwtAuthenticationFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         verify(filterChain).doFilter(request, response);
     }
@@ -57,7 +58,7 @@ public class JwtAuthenticationFilterTest {
         when(jwtService.validateTokenAndRetrieveSubject("invalidtoken"))
                 .thenThrow(new RuntimeException("Token inválido"));
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         assertEquals(401, response.getStatus());
         assertEquals("{\"error\":\"" + INVALID_OR_EXPIRED_TOKEN + "\"}", response.getContentAsString());
@@ -79,7 +80,7 @@ public class JwtAuthenticationFilterTest {
         UserDetails userDetails = new User(username, "password", Collections.emptyList());
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         assertInstanceOf(UsernamePasswordAuthenticationToken.class, SecurityContextHolder.getContext().getAuthentication());
         assertEquals(username, SecurityContextHolder.getContext().getAuthentication().getName());
@@ -93,7 +94,7 @@ public class JwtAuthenticationFilterTest {
         request.addHeader("Authorization", "Token abcdef");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         verify(filterChain).doFilter(request, response);
     }
@@ -110,7 +111,7 @@ public class JwtAuthenticationFilterTest {
 
         when(jwtService.validateTokenAndRetrieveSubject("validtoken")).thenReturn("testuser");
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         assertEquals("existingUser", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
@@ -129,11 +130,9 @@ public class JwtAuthenticationFilterTest {
         request.addHeader("Authorization", "Bearer " + token);
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
 
         assertNull(SecurityContextHolder.getContext().getAuthentication());
         verify(filterChain).doFilter(request, response);
     }
-
-
 }

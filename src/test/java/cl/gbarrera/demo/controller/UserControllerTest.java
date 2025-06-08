@@ -1,10 +1,11 @@
 package cl.gbarrera.demo.controller;
 
-import cl.gbarrera.demo.dto.UserDto;
-import cl.gbarrera.demo.dto.ErrorResponseDto;
-import cl.gbarrera.demo.service.JwtService;
-import cl.gbarrera.demo.service.RefreshTokenService;
-import cl.gbarrera.demo.service.UserService;
+import cl.gbarrera.demo.user.application.dto.UserDto;
+import cl.gbarrera.demo.infrastructure.web.dto.ErrorResponseDto;
+import cl.gbarrera.demo.user.security.JwtService;
+import cl.gbarrera.demo.user.security.RefreshTokenService;
+import cl.gbarrera.demo.user.application.service.UserService;
+import cl.gbarrera.demo.user.infrastructure.web.UserController;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import cl.gbarrera.demo.model.RefreshToken;
 
 import java.util.HashMap;
 import java.util.Map;

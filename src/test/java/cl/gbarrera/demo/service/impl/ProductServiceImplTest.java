@@ -1,11 +1,12 @@
 package cl.gbarrera.demo.service.impl;
 
-import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.dto.ProductRequestDTO;
-import cl.gbarrera.demo.dto.ProductSearchCriteria;
-import cl.gbarrera.demo.exception.InvalidProductException;
-import cl.gbarrera.demo.model.Product;
-import cl.gbarrera.demo.repository.ProductRepository;
+import cl.gbarrera.demo.product.application.dto.ProductDTO;
+import cl.gbarrera.demo.product.application.dto.ProductRequestDTO;
+import cl.gbarrera.demo.product.application.dto.ProductSearchCriteria;
+import cl.gbarrera.demo.product.application.exception.InvalidProductException;
+import cl.gbarrera.demo.product.domain.Product;
+import cl.gbarrera.demo.product.infrastructure.persistence.ProductRepository;
+import cl.gbarrera.demo.product.infrastructure.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

@@ -1,10 +1,11 @@
 package cl.gbarrera.demo.controller;
 
-import cl.gbarrera.demo.dto.ProductDTO;
-import cl.gbarrera.demo.dto.ProductRequestDTO;
-import cl.gbarrera.demo.dto.ProductSearchCriteria;
-import cl.gbarrera.demo.model.Product;
-import cl.gbarrera.demo.service.ProductService;
+import cl.gbarrera.demo.product.application.dto.ProductDTO;
+import cl.gbarrera.demo.product.application.dto.ProductRequestDTO;
+import cl.gbarrera.demo.product.application.dto.ProductSearchCriteria;
+import cl.gbarrera.demo.product.domain.Product;
+import cl.gbarrera.demo.product.application.service.ProductService;
+import cl.gbarrera.demo.product.infrastructure.web.controller.ProductController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

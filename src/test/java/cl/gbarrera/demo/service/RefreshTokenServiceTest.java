@@ -1,7 +1,8 @@
 package cl.gbarrera.demo.service;
 
-import cl.gbarrera.demo.model.RefreshToken;
-import cl.gbarrera.demo.repository.RefreshTokenRepository;
+import cl.gbarrera.demo.user.security.RefreshToken;
+import cl.gbarrera.demo.user.security.RefreshTokenRepository;
+import cl.gbarrera.demo.user.security.RefreshTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

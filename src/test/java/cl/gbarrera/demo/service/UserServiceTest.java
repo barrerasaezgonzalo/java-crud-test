@@ -1,7 +1,8 @@
 package cl.gbarrera.demo.service;
 
-import cl.gbarrera.demo.model.User;
-import cl.gbarrera.demo.repository.UserRepository;
+import cl.gbarrera.demo.user.application.domain.User;
+import cl.gbarrera.demo.user.infrastructure.persistence.UserRepository;
+import cl.gbarrera.demo.user.application.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

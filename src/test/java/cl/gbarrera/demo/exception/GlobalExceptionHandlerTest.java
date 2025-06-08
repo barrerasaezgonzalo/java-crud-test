@@ -1,6 +1,8 @@
 package cl.gbarrera.demo.exception;
 
-import cl.gbarrera.demo.model.ErrorResponse;
+import cl.gbarrera.demo.infrastructure.web.dto.ErrorResponse;
+import cl.gbarrera.demo.infrastructure.web.exception.GlobalExceptionHandler;
+import cl.gbarrera.demo.product.application.exception.InvalidProductException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
