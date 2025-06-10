@@ -11,16 +11,15 @@ import lombok.*;
 @AllArgsConstructor
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(nullable = false)
-    private Long price;
+  @Column(nullable = false)
+  private Long price;
 
-    @Version
-    private Integer version;
+  @Version private Integer version;
 }

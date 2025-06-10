@@ -6,6 +6,6 @@ class DemoApplicationMainTest {
 
   @Test
   void mainMethodRuns() {
-    DemoApplication.main(new String[]{});
+    DemoApplication.main(new String[] {});
   }
 }

@@ -9,13 +9,12 @@ plugins {
 
 spotless {
 	java {
-		googleJavaFormat('1.15.0')
+		googleJavaFormat('1.17.0')
 	}
 }
 
 group = 'cl.gbarrera'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
 
 java {
 	toolchain {

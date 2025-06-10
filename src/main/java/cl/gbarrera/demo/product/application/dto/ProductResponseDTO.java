@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductResponseDTO {
 
-    private Long id;
-    private String name;
-    private Long price;
+  private Long id;
+  private String name;
+  private Long price;
 }

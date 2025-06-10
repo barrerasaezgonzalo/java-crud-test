@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ErrorResponseDto {
 
-    private String error;
-    private Object message;
-    private int status;
+  private String error;
+  private Object message;
+  private int status;
 }

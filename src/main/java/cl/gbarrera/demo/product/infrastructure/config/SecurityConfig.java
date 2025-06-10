@@ -22,56 +22,61 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+  private final JwtService jwtService;
+  private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtService jwtService, @Lazy UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
-    }
+  public SecurityConfig(JwtService jwtService, @Lazy UserDetailsService userDetailsService) {
+    this.jwtService = jwtService;
+    this.userDetailsService = userDetailsService;
+  }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+  @Bean
+  public JwtAuthenticationFilter jwtAuthenticationFilter() {
 
-        return new JwtAuthenticationFilter(jwtService, userDetailsService);
-    }
+    return new JwtAuthenticationFilter(jwtService, userDetailsService);
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+  @Bean
+  public PasswordEncoder passwordEncoder() {
 
-        return new BCryptPasswordEncoder();
-    }
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/users/login",
-                                "/users/refresh",
-                                "/users/logout",
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products/**").hasAuthority("ROLE_USER")
-                        .requestMatchers(HttpMethod.POST, "/products/**").hasAuthority("ROLE_USER")
-                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAuthority("ROLE_USER")
-                        .anyRequest().authenticated()
-                        /*  .anyRequest().permitAll() */
-                )
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(
+                        "/users/login",
+                        "/users/refresh",
+                        "/users/logout",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/products/**")
+                    .hasAuthority("ROLE_USER")
+                    .requestMatchers(HttpMethod.POST, "/products/**")
+                    .hasAuthority("ROLE_USER")
+                    .requestMatchers(HttpMethod.PUT, "/products/**")
+                    .hasAuthority("ROLE_USER")
+                    .anyRequest()
+                    .authenticated()
+            /*  .anyRequest().permitAll() */
+            )
+        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
-    }
+  @Bean
+  public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+    mapper.registerModule(new JavaTimeModule());
+    return mapper;
+  }
 }
