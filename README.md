@@ -12,29 +12,6 @@ Jacoco Coverage
 SLF4J Logs  
 Arquitectura Hexagonal
 
-### 🛠 Para instalar MySQL (usando los valores por defecto: usuario `root` y clave en blanco), puedes usar:
-
-```bash
-brew install mysql
-brew services start mysql
-```
-
-### Luego, accede a MySQL con:
-
-```bash
-mysql -u root -p
-```
-### Dentro del cliente de MySQL, crea la base de datos ejecutando:
-
-```sql
-CREATE DATABASE productos;
-```
-
-### Para ejecutar la aplicación, usa:
-```bash
-./gradlew bootRun
-```
-
 ## Creación de usuario para pruebas
 
 Para probar el endpoint de creación de usuarios, primero crea un usuario en la base de datos MySQL manualmente (tabla users).
